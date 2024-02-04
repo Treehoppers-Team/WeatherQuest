@@ -1,6 +1,17 @@
 import React from "react";
 
-const Dashboard = ({ returnToHome, balance, goToSelect }) => {
+interface MyComponentProps {
+  // defining the types of props in the functional signature
+  returnToHome: any;
+  balance: any;
+  goToSelect: any;
+}
+
+const Dashboard: React.FC<MyComponentProps> = ({
+  returnToHome,
+  balance,
+  goToSelect,
+}) => {
   // Divide balance by 10^18 and convert to string
   const formattedBalance = balance
     ? (balance / BigInt(10 ** 18)).toString()
@@ -16,7 +27,9 @@ const Dashboard = ({ returnToHome, balance, goToSelect }) => {
         <button className="dashBoardButton" onClick={returnToHome}>
           Back to Home
         </button>
-        <button className="dashBoardButton" onClick={goToSelect}>Continue</button>
+        <button className="dashBoardButton" onClick={goToSelect}>
+          Continue
+        </button>
       </div>
     </div>
   );

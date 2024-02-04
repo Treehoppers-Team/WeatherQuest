@@ -8,7 +8,12 @@ import NavBar from "@/components/NavBar";
 import SelectWeather from "@/components/SelectWeather";
 import LoadingScreen from "@/components/LoadingScreen";
 import EndingScreen from "@/components/EndingScreen";
-import { act } from "react-dom/test-utils";
+
+declare global {
+  interface Window {
+    ethereum?: any; // Adjust the type as necessary
+  }
+}
 
 export default function Home() {
   // contract variables
@@ -885,7 +890,7 @@ export default function Home() {
     setSelectedWeather(null); // selected weather in particular
   };
 
-  const handleWeatherClick = (weather) => {
+  const handleWeatherClick = (weather: any) => {
     setSelectedWeather(selectedWeather === weather ? null : weather); // if the weather is already the current weather just set null if not, if not set the weather
   }; // sets the weather if not null
 
@@ -899,7 +904,7 @@ export default function Home() {
     }
   };
 
-  const play = async (weather) => {
+  const play = async (weather: any) => {
     // need to add error handler for not enough gas? -> failure
     try {
       const result = await gameContract.play(weather, false, {
@@ -922,12 +927,12 @@ export default function Home() {
       await gameContract.on(
         "GamePlayed",
         (
-          player,
-          chosenWeather,
-          actualWeather,
-          won,
-          ethDeposited,
-          tokenReward
+          player: any,
+          chosenWeather: any,
+          actualWeather: any,
+          won: any,
+          ethDeposited: any,
+          tokenReward: any
         ) => {
           // console.log(`This is the transaction data, ${transaction}`);
 

@@ -1,6 +1,19 @@
 import React from "react";
 
-const EndingScreen = ({ returnToHome, chosenWeather, actualWeather, won }) => {
+interface MyComponentProps {
+  // defining the types of props in the functional signature
+  returnToHome: any;
+  chosenWeather: any;
+  actualWeather: any;
+  won: any;
+}
+
+const EndingScreen: React.FC<MyComponentProps> = ({
+  returnToHome,
+  chosenWeather,
+  actualWeather,
+  won,
+}) => {
   return (
     <div className="dashboard-container">
       <div className="weather-box-container">

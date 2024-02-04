@@ -1,6 +1,17 @@
 import React from "react";
 
-const HomeScreen = ({ connectWallet, playGame , walletAddress }) => {
+interface MyComponentProps {
+  // defining the types of props in the functional signature
+  connectWallet: any;
+  playGame: any;
+  walletAddress: any;
+}
+
+const HomeScreen: React.FC<MyComponentProps> = ({
+  connectWallet,
+  playGame,
+  walletAddress,
+}) => {
   return (
     <div className="container">
       <img src="/WeatherQuest.png" alt="WeatherQuest" />

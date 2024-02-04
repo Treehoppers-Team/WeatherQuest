@@ -1,12 +1,19 @@
 import React, { useState } from "react";
 
-const SelectWeather = ({
+interface MyComponentProps {
+  // defining the types of props in the functional signature
+  returnToDash: any;
+  selectedWeather: any;
+  handleWeatherClick: any;
+  handleSelectWeatherClick: any;
+}
+
+const SelectWeather: React.FC<MyComponentProps> = ({
   returnToDash,
   selectedWeather,
   handleWeatherClick,
   handleSelectWeatherClick,
 }) => {
-
   return (
     <div className="dashboard-container">
       <div className="weather-box-container">
