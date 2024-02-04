@@ -1,6 +1,15 @@
 import { useState } from "react";
 
-const DisconnectWalletDropdown = ({ walletAddress, disConnectWallet }) => {
+interface MyComponentProps {
+  // defining the types of props in the functional signature
+  walletAddress: any;
+  disConnectWallet: any;
+}
+
+const DisconnectWalletDropdown: React.FC<MyComponentProps> = ({
+  walletAddress,
+  disConnectWallet,
+}) => {
   const [showDisconnectPopup, setShowDisconnectPopup] = useState(false);
 
   const toggleDisconnectPopup = () => {
