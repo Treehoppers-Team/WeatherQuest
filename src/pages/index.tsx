@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 const ethers = require("ethers");
 import BgVideo from "@/components/BgVideo";
@@ -8,6 +9,7 @@ import NavBar from "@/components/NavBar";
 import SelectWeather from "@/components/SelectWeather";
 import LoadingScreen from "@/components/LoadingScreen";
 import EndingScreen from "@/components/EndingScreen";
+const endpointUrl = process.env.NEXT_PUBLIC_ENDPOINT_URL;
 
 declare global {
   interface Window {
@@ -926,16 +928,15 @@ export default function Home() {
     try {
       await gameContract.on(
         "GamePlayed",
-        (
-          player: any,
-          chosenWeather: any,
-          actualWeather: any,
-          won: any,
-          ethDeposited: any,
-          tokenReward: any
+        async (
+          player: string,
+          chosenWeather: string,
+          actualWeather: string,
+          won: boolean,
+          ethDeposited: BigInt,
+          tokenReward: BigInt
         ) => {
-          // console.log(`This is the transaction data, ${transaction}`);
-
+          // Check if the player is the current user
           if (player.toLowerCase() === walletAddress?.toLowerCase()) {
             console.log(
               `The user ${player}, chose ${chosenWeather} when the actual weather was ${actualWeather}, did he win? ${won}`
@@ -944,11 +945,41 @@ export default function Home() {
             setActualWeather(actualWeather);
             setWon(won);
             setLoadingState(false);
+
+            if (!endpointUrl) {
+              console.error("Endpoint URL is not defined");
+              // endpointUrl = "http://localhost:3500/events";
+              return; // or handle this case accordingly
+            }
+
+            // Make a POST request to your endpoint
+            try {
+              const response = await fetch(endpointUrl, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  player,
+                  chosenWeather,
+                  actualWeather,
+                  won,
+                }),
+              });
+
+              if (!response.ok) {
+                throw new Error("Failed to create event");
+              }
+
+              console.log("Event created successfully");
+            } catch (error) {
+              console.error("Error creating event:", error);
+            }
           }
         }
       );
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   };
 
