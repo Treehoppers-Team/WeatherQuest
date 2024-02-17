@@ -9,7 +9,7 @@ import NavBar from "@/components/NavBar";
 import SelectWeather from "@/components/SelectWeather";
 import LoadingScreen from "@/components/LoadingScreen";
 import EndingScreen from "@/components/EndingScreen";
-const endpointUrl = process.env.NEXT_PUBLIC_ENDPOINT_URL;
+import Head from "next/head";
 
 declare global {
   interface Window {
@@ -31,11 +31,6 @@ export default function Home() {
         {
           internalType: "address",
           name: "_oracleContract",
-          type: "address",
-        },
-        {
-          internalType: "address",
-          name: "_vrfContract",
           type: "address",
         },
       ],
@@ -196,6 +191,19 @@ export default function Home() {
       type: "function",
     },
     {
+      inputs: [
+        {
+          internalType: "uint256",
+          name: "amount",
+          type: "uint256",
+        },
+      ],
+      name: "approveContract",
+      outputs: [],
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
       inputs: [],
       name: "depositAmount",
       outputs: [
@@ -223,12 +231,12 @@ export default function Home() {
     },
     {
       inputs: [],
-      name: "getRandomNumberVRF",
+      name: "gToken",
       outputs: [
         {
-          internalType: "uint256",
+          internalType: "contract GToken",
           name: "",
-          type: "uint256",
+          type: "address",
         },
       ],
       stateMutability: "view",
@@ -394,45 +402,6 @@ export default function Home() {
       type: "function",
     },
     {
-      inputs: [],
-      name: "weToken",
-      outputs: [
-        {
-          internalType: "contract CustomToken",
-          name: "",
-          type: "address",
-        },
-      ],
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      inputs: [],
-      name: "weVRF",
-      outputs: [
-        {
-          internalType: "contract WeVRF",
-          name: "",
-          type: "address",
-        },
-      ],
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      inputs: [
-        {
-          internalType: "uint256",
-          name: "amount",
-          type: "uint256",
-        },
-      ],
-      name: "withdrawETH",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
       inputs: [
         {
           internalType: "uint256",
@@ -454,28 +423,104 @@ export default function Home() {
     {
       inputs: [
         {
-          internalType: "string",
-          name: "name",
-          type: "string",
-        },
-        {
-          internalType: "string",
-          name: "symbol",
-          type: "string",
+          internalType: "address",
+          name: "account",
+          type: "address",
         },
         {
           internalType: "uint256",
-          name: "initialSupply",
-          type: "uint256",
-        },
-        {
-          internalType: "uint256",
-          name: "maxSupply",
+          name: "amount",
           type: "uint256",
         },
       ],
       stateMutability: "nonpayable",
       type: "constructor",
+    },
+    {
+      inputs: [
+        {
+          internalType: "address",
+          name: "spender",
+          type: "address",
+        },
+        {
+          internalType: "uint256",
+          name: "allowance",
+          type: "uint256",
+        },
+        {
+          internalType: "uint256",
+          name: "needed",
+          type: "uint256",
+        },
+      ],
+      name: "ERC20InsufficientAllowance",
+      type: "error",
+    },
+    {
+      inputs: [
+        {
+          internalType: "address",
+          name: "sender",
+          type: "address",
+        },
+        {
+          internalType: "uint256",
+          name: "balance",
+          type: "uint256",
+        },
+        {
+          internalType: "uint256",
+          name: "needed",
+          type: "uint256",
+        },
+      ],
+      name: "ERC20InsufficientBalance",
+      type: "error",
+    },
+    {
+      inputs: [
+        {
+          internalType: "address",
+          name: "approver",
+          type: "address",
+        },
+      ],
+      name: "ERC20InvalidApprover",
+      type: "error",
+    },
+    {
+      inputs: [
+        {
+          internalType: "address",
+          name: "receiver",
+          type: "address",
+        },
+      ],
+      name: "ERC20InvalidReceiver",
+      type: "error",
+    },
+    {
+      inputs: [
+        {
+          internalType: "address",
+          name: "sender",
+          type: "address",
+        },
+      ],
+      name: "ERC20InvalidSender",
+      type: "error",
+    },
+    {
+      inputs: [
+        {
+          internalType: "address",
+          name: "spender",
+          type: "address",
+        },
+      ],
+      name: "ERC20InvalidSpender",
+      type: "error",
     },
     {
       anonymous: false,
@@ -560,7 +605,7 @@ export default function Home() {
         },
         {
           internalType: "uint256",
-          name: "amount",
+          name: "value",
           type: "uint256",
         },
       ],
@@ -595,6 +640,24 @@ export default function Home() {
       type: "function",
     },
     {
+      inputs: [
+        {
+          internalType: "address",
+          name: "account",
+          type: "address",
+        },
+        {
+          internalType: "uint256",
+          name: "amount",
+          type: "uint256",
+        },
+      ],
+      name: "burn",
+      outputs: [],
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
       inputs: [],
       name: "decimals",
       outputs: [
@@ -602,67 +665,6 @@ export default function Home() {
           internalType: "uint8",
           name: "",
           type: "uint8",
-        },
-      ],
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      inputs: [
-        {
-          internalType: "address",
-          name: "spender",
-          type: "address",
-        },
-        {
-          internalType: "uint256",
-          name: "subtractedValue",
-          type: "uint256",
-        },
-      ],
-      name: "decreaseAllowance",
-      outputs: [
-        {
-          internalType: "bool",
-          name: "",
-          type: "bool",
-        },
-      ],
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
-      inputs: [
-        {
-          internalType: "address",
-          name: "spender",
-          type: "address",
-        },
-        {
-          internalType: "uint256",
-          name: "addedValue",
-          type: "uint256",
-        },
-      ],
-      name: "increaseAllowance",
-      outputs: [
-        {
-          internalType: "bool",
-          name: "",
-          type: "bool",
-        },
-      ],
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
-      inputs: [],
-      name: "maxSupply",
-      outputs: [
-        {
-          internalType: "uint256",
-          name: "",
-          type: "uint256",
         },
       ],
       stateMutability: "view",
@@ -734,7 +736,7 @@ export default function Home() {
         },
         {
           internalType: "uint256",
-          name: "amount",
+          name: "value",
           type: "uint256",
         },
       ],
@@ -763,7 +765,7 @@ export default function Home() {
         },
         {
           internalType: "uint256",
-          name: "amount",
+          name: "value",
           type: "uint256",
         },
       ],
@@ -779,8 +781,8 @@ export default function Home() {
       type: "function",
     },
   ];
-  const gamecontractAddress = "0x576120a3ced589fbf15236855f4a5e35f6876455";
-  const tokenContractAddress = "0x0779F67a7aC7b9cE9c0354f30A2bA24F862902fb";
+  const gamecontractAddress = "0xD6db42BbC0967a1B91C091a702D32181ff83679a";
+  const tokenContractAddress = "0x2735Cda07b8394Cd4315E12476c5eB6437F70093";
   const [tokenContract, setTokenContract] = useState<any>(null);
   const [gameContract, setGameContract] = useState<any>(null);
 
@@ -788,11 +790,9 @@ export default function Home() {
 
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [provider, setProvider] = useState<any>();
-  const customProvider = new ethers.JsonRpcProvider(
-    "https://eth-sepolia.g.alchemy.com/v2/tn3cvAYCYuHAHlN_3Ek5AcBJeQAk3ITQ"
-  );
-
-  const [weather, setWeather] = useState<any>(); // deprecated
+  // const customProvider = new ethers.JsonRpcProvider(
+  //   "https://eth-sepolia.g.alchemy.com/v2/tn3cvAYCYuHAHlN_3Ek5AcBJeQAk3ITQ"
+  // );
 
   // screen states
 
@@ -824,15 +824,15 @@ export default function Home() {
         method: "wallet_addEthereumChain",
         params: [
           {
-            chainId: "0xaa36a7",
-            rpcUrls: ["https://rpc.sepolia.org"],
-            chainName: "Sepolia",
+            chainId: "0xa0c71fd",
+            rpcUrls: ["https://sepolia.blast.io"],
+            chainName: "Blast Sepolia",
             nativeCurrency: {
-              name: "SepoliaETH",
+              name: "BlastETH",
               symbol: "ETH",
               decimals: 18,
             },
-            blockExplorerUrls: ["https://sepolia.etherscan.io/"],
+            blockExplorerUrls: ["https://testnet.blastscan.io"],
           },
         ],
       });
@@ -870,14 +870,36 @@ export default function Home() {
   };
 
   const populateDashboard = async () => {
-    console.log(tokenContract);
     const result = await tokenContract.balanceOf(walletAddress);
     console.log(
-      "the current balance of wetoken is (result)",
+      "the current balance of Gtoken is (result)",
       result,
       typeof result
     );
     setWeBalance(result);
+    const checkAllowance = await tokenContract.allowance(
+      walletAddress,
+      gamecontractAddress // avran's address
+    );
+    console.log(`Current allowance for game contract is ${checkAllowance}`);
+    const depositAmount = await gameContract.depositAmount();
+    console.log(`Current deposit amount is ${depositAmount}`);
+
+    // I need to check allowance < deposit amount than enable approval
+    try {
+      if (parseInt(checkAllowance) < parseInt(depositAmount)) {
+        alert(
+          `Your current GToken allowance for transfers is too low, you need to increase the allowance to make GToken deposits into this contract, please confirm the metamask transaction`
+        );
+        const allowanceAmount = parseInt(depositAmount) * 3;
+        const enableAllowance = await tokenContract.approve(
+          gamecontractAddress,
+          String(allowanceAmount)
+        );
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const goToSelect = async () => {
@@ -909,14 +931,27 @@ export default function Home() {
   const play = async (weather: any) => {
     // need to add error handler for not enough gas? -> failure
     try {
-      const result = await gameContract.play(weather, false, {
-        value: 1000000000000000, // 0.001ETH
-      });
-      console.log(result.hash, typeof result.hash);
-      setSelectWeatherState(false);
-      setLoadingState(true);
-      listenEvent();
-      setSelectedWeather(null);
+      const checkAllowance = await tokenContract.allowance(
+        walletAddress,
+        gamecontractAddress // avran's address
+      );
+      console.log(`Current allowance for game contract is ${checkAllowance}`);
+      const depositAmount = await gameContract.depositAmount();
+      console.log(`Current deposit amount is ${depositAmount}`);
+      if (parseInt(checkAllowance) < parseInt(depositAmount)) {
+        alert(
+          `Your current GToken allowance for transfers is too low, if you have increased the allowance please wait for the transaction to be confirmed, if not please go back to the Home screen`
+        );
+      } else {
+        const result = await gameContract.play(weather, true, {
+          value: 0, // 0.001ETH
+        });
+        console.log(result.hash, typeof result.hash);
+        setSelectWeatherState(false);
+        setLoadingState(true);
+        listenEvent();
+        setSelectedWeather(null);
+      }
     } catch (e) {
       console.log(e);
       setSelectedWeather(null);
@@ -945,36 +980,6 @@ export default function Home() {
             setActualWeather(actualWeather);
             setWon(won);
             setLoadingState(false);
-
-            if (!endpointUrl) {
-              console.error("Endpoint URL is not defined");
-              // endpointUrl = "http://localhost:3500/events";
-              return; // or handle this case accordingly
-            }
-
-            // Make a POST request to your endpoint
-            try {
-              const response = await fetch(endpointUrl, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  player,
-                  chosenWeather,
-                  actualWeather,
-                  won,
-                }),
-              });
-
-              if (!response.ok) {
-                throw new Error("Failed to create event");
-              }
-
-              console.log("Event created successfully");
-            } catch (error) {
-              console.error("Error creating event:", error);
-            }
           }
         }
       );
@@ -983,19 +988,12 @@ export default function Home() {
     }
   };
 
-  // Ending Screen Functions
-
-  // deprecated functions
-
-  const checkWeather = async () => {
-    console.log(gameContract);
-    const result = await gameContract.getTemperatureFromOracle();
-    console.log(result);
-    setWeather(result);
-  };
-
   return (
     <div className="appContainer">
+      <Head>
+        <title>Weather Quest</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <NavBar
         connectWallet={connectWallet}
         disConnectWallet={disConnectWallet}

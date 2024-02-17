@@ -30,8 +30,10 @@ body {
 .navbarLogoLeft {
   width: 150px; /* Adjust the width as needed */
   height: auto; /* Maintain aspect ratio */
+  margin-left: 1vh;
   transition: transform 0.3s ease-in-out;
 }
+
 .navbarLogoRight {
   width: 80px; /* Adjust the width as needed */
   height: auto; /* Maintain aspect ratio */
@@ -40,7 +42,7 @@ body {
 
 .navbarLogoLeft:hover,
 .navbarLogoRight:hover {
-  transform: scale(1.3); /* Grow by 10% on hover */
+  transform: scale(1.1); /* Grow by 10% on hover */
 }
 
 .navbarSpacer {
