@@ -13,7 +13,7 @@ const Dashboard: React.FC<MyComponentProps> = ({
   goToSelect,
 }) => {
   // Divide balance by 10^18 and convert to string
-  const formattedBalance = parseInt(balance) / 10 ** 18;
+  const formattedBalance = (parseInt(balance) / 10 ** 18).toFixed(3);;
 
   return (
     <div className="dashboard-container">
