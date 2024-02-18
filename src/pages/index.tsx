@@ -803,7 +803,7 @@ export default function Home() {
 
   // game variables
 
-  const [weBalance, setWeBalance] = useState<BigInt>();
+  const [weBalance, setWeBalance] = useState<BigInt | null>(null);
   const [selectedWeather, setSelectedWeather] = useState<any>(null);
 
   // ending screen variables
@@ -860,8 +860,6 @@ export default function Home() {
 
   const playGame = async () => {
     await populateDashboard();
-    setHomeState(false);
-    setDashState(true);
   };
 
   const returnToHome = async () => {
@@ -897,14 +895,32 @@ export default function Home() {
           String(allowanceAmount)
         );
       }
+      setHomeState(false);
+      setDashState(true);
     } catch (e) {
       console.log(e);
+      setHomeState(true);
+      setDashState(false);
     }
   };
 
   const goToSelect = async () => {
-    setSelectWeatherState(true);
-    setDashState(false);
+    if (
+      weBalance !== null &&
+      weBalance !== undefined &&
+      weBalance.toString() == "0"
+    ) {
+      const confirmed = window.confirm(
+        "Your GTK balance is zero. Do you want to go to GambleDao to top up?"
+      );
+      if (confirmed) {
+        // Redirect user to a different website
+        window.location.href = "https://gamble-dao.vercel.app/";
+      }
+    } else {
+      setSelectWeatherState(true);
+      setDashState(false);
+    }
   };
 
   // select weather functions
